@@ -1,3 +1,6 @@
+"""
+Path operations
+"""
 from typing_extensions import Annotated
 from fastapi import APIRouter, Depends
 from core import dependencies as global_deps

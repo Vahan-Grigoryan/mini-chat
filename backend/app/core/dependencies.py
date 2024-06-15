@@ -1,3 +1,6 @@
+"""
+Global dependencies that can be used in any service 
+"""
 from functools import lru_cache
 from fastapi import Depends
 from sqlalchemy.orm import Session

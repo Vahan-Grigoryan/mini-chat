@@ -1,3 +1,6 @@
+"""
+DB connection and Base abstract model for all other models
+"""
 from sqlalchemy import Column, Integer, create_engine
 from sqlalchemy.engine import URL
 from sqlalchemy.orm import declared_attr, sessionmaker, DeclarativeBase

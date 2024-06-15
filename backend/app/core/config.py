@@ -1,3 +1,6 @@
+"""
+Settings for whole project
+"""
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import BaseModel
 from api.auth.config import AuthSettings
