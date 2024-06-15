@@ -1,3 +1,6 @@
+"""
+Models(db tables)
+"""
 import hashlib
 from sqlalchemy import Column, Integer, Boolean, String
 from core.db import Base

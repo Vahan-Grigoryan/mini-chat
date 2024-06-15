@@ -1,4 +1,14 @@
+"""
+This file created for place code, that can make convenient to use any
+internal functionality of system(not business logic).
+"""
 def from_camel_to_snake_case(string: str):
+    """
+    Examples:
+        from_camel_to_snake_case("Product") -> product
+        from_camel_to_snake_case("UserProfile") -> user_profile
+        from_camel_to_snake_case("Index") -> indice
+    """
     string_by_chars = [*string]
     plural_transformations = {
         "y": "ie",  
