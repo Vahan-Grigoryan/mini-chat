@@ -14,7 +14,7 @@ def register_user(
     settings: global_deps.settings,
     db_session: global_deps.db_session,
 ):
-    return settings.model_dump()
+    return "Not implemented"
 
 @router.get("/login")
 def login_user(
