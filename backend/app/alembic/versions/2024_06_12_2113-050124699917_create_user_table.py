@@ -1,5 +1,5 @@
 """
-Create User table
+Create users table
 
 Revision ID: 050124699917
 Revises: 

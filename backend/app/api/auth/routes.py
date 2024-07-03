@@ -1,25 +1,25 @@
 """
 Path operations
 """
-from typing_extensions import Annotated
-from fastapi import APIRouter, Depends
-from core import dependencies as global_deps
+from fastapi import APIRouter
+from . import dependencies, schemas
 
 
 router = APIRouter()
 
 
-@router.get("/register")
-def register_user(
-    settings: global_deps.settings,
-    db_session: global_deps.db_session,
+@router.post(
+    "/register",
+	response_model=schemas.UserRegistrationResponse
+)
+async def register_user(
+    created_user: dependencies.create_user,
 ):
-    return "Not implemented"
+    """User registration endpoint"""
+
+    return created_user
 
 @router.get("/login")
-def login_user(
-    settings: global_deps.settings,
-    db_session: global_deps.db_session,
-):
+def login_user():
     return "Not implemented"
 

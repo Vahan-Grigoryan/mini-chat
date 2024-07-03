@@ -7,10 +7,14 @@ from core.db import Base
 
 
 class User(Base):
+    """User model"""
+    email = Column(String(500), unique=True, nullable=False)
     first_name = Column(String(50), nullable=False)
     last_name = Column(String(50), nullable=False)
-    age = Column(Integer)
     password = Column(String(200), nullable=False)
+    age = Column(Integer)
+    photo = Column(String(500))
+    tel = Column(Integer)
 
 
     def set_password(self, new_password):
