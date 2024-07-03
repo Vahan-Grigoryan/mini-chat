@@ -2,8 +2,7 @@
 Settings for whole project
 """
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from pydantic import BaseModel
-from api.auth.config import AuthSettings
+from pydantic import BaseModel, computed_field
 
 
 class DatabaseSettings(BaseModel):
@@ -21,4 +20,9 @@ class Settings(BaseSettings):
     port: int = 8000
 
     db: DatabaseSettings
-    auth: AuthSettings
+    #auth: AuthSettings
+
+    @computed_field
+    @property
+    def uri(self) -> str:
+        return f"http://{self.host}:{self.port}"
