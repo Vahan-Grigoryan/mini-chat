@@ -4,8 +4,11 @@ Request bodies for path operations
 from pydantic import BaseModel, ConfigDict
 
 
-class UserRegistrationResponse(BaseModel):
-    """Model used for returning created user"""
+class UserDataResponse(BaseModel):
+    """
+    Model used for returning full user data
+    (can be used after creating/finding/updating user)
+    """
     model_config = ConfigDict(from_attributes=True)
 
     email: str
@@ -14,3 +17,4 @@ class UserRegistrationResponse(BaseModel):
     age: int | None
     photo: str | None
     tel: str | None
+
