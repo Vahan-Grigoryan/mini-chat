@@ -1,7 +1,8 @@
 """
 Path operations
 """
-from fastapi import APIRouter
+from typing import Annotated
+from fastapi import APIRouter, Cookie
 from fastapi.responses import JSONResponse
 from api.auth import utils
 from core import dependencies as global_deps
@@ -34,14 +35,14 @@ def tokens(
     return refresh_token as httponly cookie
 	"""
     access_token = utils.create_token(
+        settings,
         "access_token",
         {"user_id": user.id},
-        settings
     )
     refresh_token = utils.create_token(
+        settings,
         "refresh_token",
         {"user_id": user.id},
-        settings
     )
     response = JSONResponse(
         {"access_token": access_token, "token_type": "Bearer"}
@@ -55,7 +56,20 @@ def tokens(
     return response
 
 
-@router.get("/users/me", response_model=schemas.UserDataResponse)
-def route_with_required_auth(current_user: dependencies.current_user):
-    """Just check valid auth in this path operation(temporary)"""
-    return current_user
+@router.get("/refresh", response_model=schemas.AccessToken)
+def refresh_access_token(
+    refresh_token: Annotated[str, Cookie()],
+    settings: global_deps.settings
+):
+    payload = utils.decode_token(settings, refresh_token, "Refresh token expired")
+    access_token = utils.create_token(
+        settings,
+        "access_token",
+        {"user_id": payload["user_id"]},
+    )
+    return {"access_token": access_token, "token_type": "Bearer"}
+    
+
+@router.get("/tst")
+def check_auth(current_user: dependencies.current_user):
+    return "YEAH"

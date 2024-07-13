@@ -5,7 +5,7 @@ DRY pattern.
 from datetime import datetime, timedelta, timezone
 from typing import Literal
 import jwt
-from fastapi import UploadFile
+from fastapi import HTTPException, UploadFile
 from core.config import Settings
 
 
@@ -27,9 +27,9 @@ async def download_photo_if_provided(
     return photo_path
 
 def create_token(
+	settings: Settings,
     token_name: Literal["access_token", "refresh_token"],
 	payload_part: dict,
-	settings: Settings
 ):
     """
 	Create token and return it
@@ -51,3 +51,37 @@ def create_token(
     )
 
     return token
+
+def decode_token(
+	settings: Settings,
+    token: str,
+	token_expired_error_message: str,
+):
+    """
+    Decode token and return payload.
+    If token expired, raise appropriate error.
+    If unexpected error occured, return it to client.
+    """
+    try:
+        payload = jwt.decode(
+            token,
+	        settings.secret_key,
+	        [settings.auth.jwt_algorithm]
+        )
+        return payload
+        
+    except jwt.exceptions.ExpiredSignatureError:
+        raise HTTPException(
+            status_code=401,
+            detail={
+                "message": token_expired_error_message
+            }
+        )
+
+    except jwt.exceptions.InvalidTokenError:
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "message": "Something went wrong"
+            }
+        )
