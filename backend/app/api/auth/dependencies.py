@@ -2,12 +2,12 @@
 Dependencies for path operations.
 Dependencies starting with the underscore are intended for a valid alias of type.
 """
-import re, jwt
+import re
 from fastapi import Depends, File, Form, HTTPException, UploadFile
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from sqlalchemy import select, exc
+from sqlalchemy import exc
 from typing_extensions import Annotated
-from . import models, sub_dependencies, db_manipulations
+from . import models, sub_dependencies, db_manipulations, utils
 from core import dependencies as global_deps
 
 
@@ -63,32 +63,9 @@ def _get_current_user(
 ):
     """
     Find and return user by provided access_token in header.
-    If access_token expired, raise appropriate error.
-    If unexpected error occured, return it to client
     """
-    try:
-        payload = jwt.decode(
-            access_token,
-	        settings.secret_key,
-	        [settings.auth.jwt_algorithm]
-        )
-        return db_manipulations.get_user(db_session, {"id": payload["user_id"]})
-        
-    except jwt.exceptions.ExpiredSignatureError:
-        raise HTTPException(
-            status_code=401,
-            detail={
-                "message": "Access token expired"
-            }
-        )
-
-    except jwt.exceptions.InvalidTokenError:
-        raise HTTPException(
-            status_code=400,
-            detail={
-                "message": "Something went wrong"
-            }
-        )
+    payload = utils.decode_token(settings, access_token, "Access token expired")
+    return db_manipulations.get_user(db_session, {"id": payload["user_id"]})
 
 
 def _authenticate_user(

@@ -18,3 +18,7 @@ class UserDataResponse(BaseModel):
     photo: str | None
     tel: str | None
 
+
+class AccessToken(BaseModel):
+    access_token: str
+    token_type: str
