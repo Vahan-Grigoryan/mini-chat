@@ -1,0 +1,10 @@
+img {
+    width: 70px;
+    height: 70px;
+}
+button {
+    margin-left: 15px;
+}
+button:first-child {
+    margin-left: 0px;
+}
