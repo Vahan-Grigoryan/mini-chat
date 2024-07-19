@@ -1,0 +1,6 @@
+.centered_box span {
+    font-size: 18px;
+    display: inline-block;
+    margin-bottom: 10px;
+    color: var(--dark-mode-no-font-color)
+}

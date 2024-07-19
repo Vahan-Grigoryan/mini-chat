@@ -13,7 +13,7 @@ router = APIRouter()
 
 
 @router.post(
-    "/register",
+    "/registration",
     response_model=schemas.UserDataResponse
 )
 async def register_user(
@@ -68,8 +68,4 @@ def refresh_access_token(
         {"user_id": payload["user_id"]},
     )
     return {"access_token": access_token, "token_type": "Bearer"}
-    
 
-@router.get("/tst")
-def check_auth(current_user: dependencies.current_user):
-    return "YEAH"

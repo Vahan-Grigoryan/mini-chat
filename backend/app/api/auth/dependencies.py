@@ -3,36 +3,30 @@ Dependencies for path operations.
 Dependencies starting with the underscore are intended for a valid alias of type.
 """
 import re
-from fastapi import Depends, File, Form, HTTPException, UploadFile
+from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy import exc
 from typing_extensions import Annotated
-from . import models, sub_dependencies, db_manipulations, utils
+from . import models, db_manipulations, utils, schemas
 from core import dependencies as global_deps
 
 
 async def _create_user(
     db_session: global_deps.db_session,
-    email: Annotated[str, Depends(sub_dependencies.check_email)],
-    first_name: Annotated[str, Form(min_length=2, max_length=50)],
-    last_name: Annotated[str, Form(min_length=2, max_length=50)],
-    password: Annotated[str, Depends(sub_dependencies.check_password)],
-    photo: Annotated[UploadFile | None, File()] = None,
-    age: Annotated[int | None, Form(gt=5)] = None,
-    tel: Annotated[int | None, Form()] = None,
+    user_data: schemas.UserInputData = Depends()
 ):
     """Create and return user to path operation"""
     try:
         user = await db_manipulations.create_user(
             db_session,
             {
-                "email": email,
-                "password": password,
-                "photo": photo,
-                "first_name": first_name,
-                "last_name": last_name,
-                "age": age,
-                "tel": tel,
+                "email": user_data.email,
+                "password": user_data.password,
+                "photo": user_data.photo,
+                "first_name": user_data.first_name,
+                "last_name": user_data.last_name,
+                "age": user_data.age,
+                "tel": user_data.tel,
             }
         )
     except exc.IntegrityError as e:

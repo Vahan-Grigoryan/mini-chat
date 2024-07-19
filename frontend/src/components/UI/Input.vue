@@ -1,15 +1,18 @@
 <template>
     <input
-	v-if="type!=='file'"
+	v-if="type == 'file'"
 	:type="type"
 	:placeholder="placeholder"
+    @input="e => model = e.target.files[0]"
+    accept="image/*"
+    class="file_input"
 	>
     <input
 	v-else
 	:type="type"
     :placeholder="placeholder"
-    accept="image/*"
-    class="file_input"
+    :value="model"
+    @input="e => model = type=='number' ? Number(e.target.value) : e.target.value"
     >
     <span
 	v-if="error_message"
@@ -25,6 +28,7 @@ const props = defineProps<{
     placeholder?: string
     error_message?: string
 }>()
+const model = defineModel()
 </script>
 
 <style scoped>

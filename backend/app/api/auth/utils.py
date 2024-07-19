@@ -4,7 +4,7 @@ DRY pattern.
 """
 from datetime import datetime, timedelta, timezone
 from typing import Literal
-import jwt
+import jwt, os
 from fastapi import HTTPException, UploadFile
 from core.config import Settings
 
@@ -21,6 +21,7 @@ async def download_photo_if_provided(
 
     photo_path = f"images/photo_for_user_{user_id}.{photo.filename.split('.')[-1]}"
     
+    os.makedirs(os.path.dirname(photo_path), exist_ok=True)
     with open(photo_path, "wb") as f:
         f.write(await photo.read())
 
