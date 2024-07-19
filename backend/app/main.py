@@ -1,6 +1,7 @@
 from fastapi.exceptions import RequestValidationError
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
@@ -13,19 +14,32 @@ app.include_router(auth_router)
 app.mount("/images", StaticFiles(directory="images"), name="images")
 settings = Settings()
 
+origins = [
+    "http://localhost:8080",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request, exc):
     """
     Change fastapi default error message for be similar to HTTPException
     """
+    errors = []
+    for error in exc.errors():
+        errors.append({
+            "field": error["loc"][-1],
+            "message": error["msg"]
+        })
     return JSONResponse(
         status_code=400,
-        content=jsonable_encoder({
-            "detail": {
-                "field": exc.errors()[0]["loc"][-1],
-                "message": exc.errors()[0]["msg"]
-            }
-        })
+        content=jsonable_encoder({"detail": errors})
     )
 
 

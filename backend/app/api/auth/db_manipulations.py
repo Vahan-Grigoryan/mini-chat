@@ -2,7 +2,7 @@
 There are all db manipulations(CRUD and other functionality)
 """
 
-from sqlalchemy import select, exc
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 from . import models, utils
 
