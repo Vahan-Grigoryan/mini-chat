@@ -21,7 +21,7 @@ class UserDataResponse(BaseModel):
     last_name: str
     age: int | None = None
     photo: str | None = None
-    tel: int | None = None
+    tel: str | None = None
 
 
 class AccessToken(BaseModel):
@@ -68,7 +68,7 @@ class UserInputData():
     
         return {
             "field": "password",
-            "message":  "Password should have at least 1 number, 1 lowercase letter, 1 uppercase letter"
+            "message":  "Password should have at least 1 number, lowercase and uppercase letter"
         }
 
 
