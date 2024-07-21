@@ -47,43 +47,26 @@
 </template>
 
 <script setup lang="ts">
+import {
+    AxiosErrorResponse,
+    UserRegistrationData,
+    UserRegistrationDataErrors,
+    ReceivedAccessToken,
+} from "@/ts/interfaces"
+import { ReceivedUserType } from "@/ts/types"
 import { reactive, ref } from "vue"
 import { useStore } from "vuex"
-import type { AxiosSuccessResponse, AxiosErrorResponse } from "@/store/actions"
-
-
-type UserDataPair = {
-    [key: string]: string
-}
-interface UserDataErrors {
-    first_name?: string
-    last_name?: string
-    email?: string
-    password?: string
-    age?: string
-    tel?: string
-    photo?: File
-}
-interface UserData {
-    first_name: string
-    last_name: string
-    email: string
-    password: string
-    age?: number
-    tel?: number
-    photo?: File
-}
 
 
 const store = useStore()
 const db_integrity_error = ref<string>("")
-const user_data: UserData = reactive({
+const user_data: UserRegistrationData = reactive({
     first_name: "",
     last_name: "",
     email: "",
     password: "",
 })
-const user_data_errors: UserDataErrors = reactive({
+const user_data_errors: UserRegistrationDataErrors = reactive({
     first_name: undefined,
     last_name: undefined,
     email: undefined,
@@ -92,15 +75,15 @@ const user_data_errors: UserDataErrors = reactive({
     tel: undefined,
 })
 
-async function create_user(){
+async function create_user(): Promise<ReceivedUserType | undefined> {
     // Create new user, show invalid inserted fields error messages if needed
     try{
         for(const key in user_data_errors){
             // Clear error messages
-            (user_data_errors as UserDataPair)[key] = ""
+            user_data_errors[(key as keyof UserRegistrationDataErrors)] = ""
         }
         db_integrity_error.value = ""
-        const { data: created_user }: AxiosSuccessResponse = await store.dispatch(
+        const created_user: ReceivedUserType = await store.dispatch(
             "commonRequest",
             {
                 url: "registration",
@@ -113,10 +96,10 @@ async function create_user(){
         )
         return created_user
     }catch(err){
-        const { data: axiosError } = err as AxiosErrorResponse<UserData>
+        const axiosError = err as AxiosErrorResponse<UserRegistrationDataErrors>
         if(Array.isArray(axiosError?.response?.data.detail)){
             for(const {field, message} of axiosError.response.data.detail){
-                (user_data_errors as UserDataPair)[field] = message
+                user_data_errors[field] = message
             }
         }
         else if(axiosError?.response?.data.detail){
@@ -124,11 +107,11 @@ async function create_user(){
         }
     }
 }
-async function authorize_user(){
+async function authorize_user(): Promise<void> {
     // Receive tokens, set access_token in LocalStorage
-    const user = await create_user()
+    const user: ReceivedUserType | undefined = await create_user()
     if(!user) return
-    const { data: { access_token } } = await store.dispatch(
+    const { access_token }: ReceivedAccessToken = await store.dispatch(
         "commonRequest",
         {
             url: "tokens",
