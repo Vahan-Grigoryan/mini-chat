@@ -6,6 +6,7 @@ import type {
 import {
     UserRegistrationData,
     UserRegistrationDataErrors,
+    UserLoginData,
 } from "./user"
 import {
     ReceivedAccessToken,
@@ -18,5 +19,6 @@ export type {
     AxiosErrorResponse,
     UserRegistrationData,
     UserRegistrationDataErrors,
+    UserLoginData,
     ReceivedAccessToken,
 }

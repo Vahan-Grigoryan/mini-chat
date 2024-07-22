@@ -42,7 +42,7 @@
 		type="file"
         v-model="user_data['photo']"
 		/>
-        <ui-ok-button @click="authorize_user">Sign up</ui-ok-button>
+        <ui-ok-button @click="login_user">Sign up</ui-ok-button>
     </ui-centered-content>
 </template>
 
@@ -51,37 +51,29 @@ import {
     AxiosErrorResponse,
     UserRegistrationData,
     UserRegistrationDataErrors,
-    ReceivedAccessToken,
 } from "@/ts/interfaces"
 import { ReceivedUserType } from "@/ts/types"
+import { authorizeUser } from "@/utils/common_requests"
+import { clearErrorData, fillErrorData } from "@/utils/form_submission"
 import { reactive, ref } from "vue"
 import { useStore } from "vuex"
 
 
 const store = useStore()
-const db_integrity_error = ref<string>("")
+const db_integrity_error = ref<string | null>(null)
 const user_data: UserRegistrationData = reactive({
     first_name: "",
     last_name: "",
     email: "",
     password: "",
 })
-const user_data_errors: UserRegistrationDataErrors = reactive({
-    first_name: undefined,
-    last_name: undefined,
-    email: undefined,
-    password: undefined,
-    age: undefined,
-    tel: undefined,
-})
+const user_data_errors: UserRegistrationDataErrors = reactive({ })
+
 
 async function create_user(): Promise<ReceivedUserType | undefined> {
     // Create new user, show invalid inserted fields error messages if needed
+    clearErrorData(user_data_errors)
     try{
-        for(const key in user_data_errors){
-            // Clear error messages
-            user_data_errors[(key as keyof UserRegistrationDataErrors)] = ""
-        }
         db_integrity_error.value = ""
         const created_user: ReceivedUserType = await store.dispatch(
             "commonRequest",
@@ -96,37 +88,23 @@ async function create_user(): Promise<ReceivedUserType | undefined> {
         )
         return created_user
     }catch(err){
-        const axiosError = err as AxiosErrorResponse<UserRegistrationDataErrors>
-        if(Array.isArray(axiosError?.response?.data.detail)){
-            for(const {field, message} of axiosError.response.data.detail){
-                user_data_errors[field] = message
-            }
-        }
-        else if(axiosError?.response?.data.detail){
-            db_integrity_error.value = axiosError.response.data.detail["message"]
-        }
+        db_integrity_error.value = fillErrorData(
+            err as AxiosErrorResponse<UserRegistrationDataErrors>,
+            user_data_errors
+        )
     }
 }
-async function authorize_user(): Promise<void> {
+async function login_user(): Promise<void> {
     // Receive tokens, set access_token in LocalStorage
     const user: ReceivedUserType | undefined = await create_user()
     if(!user) return
-    const { access_token }: ReceivedAccessToken = await store.dispatch(
-        "commonRequest",
+    authorizeUser(
+        store,
         {
-            url: "tokens",
-            method: "post",
-            data: {
-                username: user["email"],
-                password: user_data["password"],
-            },
-            headers: {
-                "Content-Type": "multipart/form-data"
-            },
-            withCredentials: true
+            username: user["email"],
+            password: user_data["password"],
         }
     )
-    localStorage.setItem("access_token", access_token)
 }
 </script>
 
