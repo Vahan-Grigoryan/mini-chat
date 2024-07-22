@@ -11,9 +11,14 @@ interface UserRegistrationDataErrors extends
 Partial<Omit<UserRegistrationData, "age" | "photo">> {
     age?: string
 }
+interface UserLoginData {
+    username: string
+    password: string
+}
 
 
 export type {
     UserRegistrationData,
     UserRegistrationDataErrors,
+    UserLoginData,
 }
