@@ -7,10 +7,6 @@ interface UserRegistrationData {
     tel?: string
     photo?: File
 }
-interface UserRegistrationDataErrors extends 
-Partial<Omit<UserRegistrationData, "age" | "photo">> {
-    age?: string
-}
 interface UserLoginData {
     username: string
     password: string
@@ -19,6 +15,5 @@ interface UserLoginData {
 
 export type {
     UserRegistrationData,
-    UserRegistrationDataErrors,
     UserLoginData,
 }

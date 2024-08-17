@@ -1,7 +1,8 @@
 /*
-There are request funcs which used in more than 1 places in project
+There are request funcs which used in many places in project
 */
-import { ReceivedAccessToken, UserLoginData } from "@/ts/interfaces";
+import {ReceivedAccessToken} from "@/ts/interfaces/auth";
+import {UserLoginData} from "@/ts/interfaces/user";
 import { Store } from "vuex";
 
 

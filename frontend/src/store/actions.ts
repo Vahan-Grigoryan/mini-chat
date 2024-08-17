@@ -1,4 +1,4 @@
-import { CommonRequestParams, CommonRequestWithAuthParams } from "@/ts/interfaces"
+import { CommonRequestParams, CommonRequestWithAuthParams } from "@/ts/interfaces/request"
 import axios from "axios"
 
 

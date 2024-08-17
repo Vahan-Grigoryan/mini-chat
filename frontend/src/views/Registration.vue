@@ -1,64 +1,65 @@
 <template>
     <ui-centered-content>
-        <h2>Registration</h2>
-        <span v-if="db_integrity_error">{{db_integrity_error}}</span>
-        <ui-input
-	    type="text"
-	    placeholder="*first name"
-        v-model="user_data['first_name']"
-        :error_message="user_data_errors['first_name']"
-	    />
-        <ui-input
-		type="text"
-		placeholder="*last name"
-        v-model="user_data['last_name']"
-        :error_message="user_data_errors['last_name']"
-		/>
-        <ui-input
-		type="email"
-		placeholder="*email"
-        v-model="user_data['email']"
-        :error_message="user_data_errors['email']"
-		/>
-        <ui-input
-		type="password"
-		placeholder="*password"
-        v-model="user_data['password']"
-        :error_message="user_data_errors['password']"
-		/>
-        <ui-input
-		type="number"
-		placeholder="tel(with '+')"
-        v-model="user_data['tel']"
-        :error_message="user_data_errors['tel']"
-		/>
-        <ui-input
-		type="number"
-		placeholder="age"
-        v-model="user_data['age']"
-        :error_message="user_data_errors['age']"
-		/>
-        <ui-input
-		type="file"
-        v-model="user_data['photo']"
-		/>
-        <ui-ok-button @click="login_user">Sign up</ui-ok-button>
+        <div class="registration_box">
+            <h2>Registration</h2>
+            <span v-if="db_integrity_error">{{db_integrity_error}}</span>
+            <ui-input
+	        type="text"
+	        placeholder="*first name"
+            v-model="user_data['first_name']"
+            :error_message="user_data_errors['first_name']"
+	        />
+            <ui-input
+		    type="text"
+		    placeholder="*last name"
+            v-model="user_data['last_name']"
+            :error_message="user_data_errors['last_name']"
+		    />
+            <ui-input
+		    type="email"
+		    placeholder="*email"
+            v-model="user_data['email']"
+            :error_message="user_data_errors['email']"
+		    />
+            <ui-input
+		    type="password"
+		    placeholder="*password"
+            v-model="user_data['password']"
+            :error_message="user_data_errors['password']"
+		    />
+            <ui-input
+		    type="number"
+		    placeholder="tel(with '+')"
+            v-model="user_data['tel']"
+            :error_message="user_data_errors['tel']"
+		    />
+            <ui-input
+		    type="number"
+		    placeholder="age"
+            v-model="user_data['age']"
+            :error_message="user_data_errors['age']"
+		    />
+            <ui-input
+		    type="file"
+            v-model="user_data['photo']"
+		    />
+            <ui-ok-button @click="login_user">Sign up</ui-ok-button>
+        </div>
     </ui-centered-content>
 </template>
 
 <script setup lang="ts">
-import {
-    AxiosErrorResponse,
-    UserRegistrationData,
-    UserRegistrationDataErrors,
-} from "@/ts/interfaces"
-import { ReceivedUserType } from "@/ts/types"
+import { AxiosErrorResponse } from "@/ts/interfaces/request"
+import { UserRegistrationData } from "@/ts/interfaces/user"
+import { ReceivedUserType, UserRegistrationDataErrors } from "@/ts/types/user"
 import { authorizeUser } from "@/utils/common_requests"
 import { clearErrorData, fillErrorData } from "@/utils/form_submission"
 import { reactive, ref } from "vue"
+import { useRouter } from "vue-router"
 import { useStore } from "vuex"
 
 
+const router = useRouter()
 const store = useStore()
 const db_integrity_error = ref<string | null>(null)
 const user_data: UserRegistrationData = reactive({
@@ -105,6 +106,7 @@ async function login_user(): Promise<void> {
             password: user_data["password"],
         }
     )
+    router.push("/home")
 }
 </script>
 

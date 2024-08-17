@@ -23,12 +23,12 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
+const input_params = defineProps<{
     type: string
     placeholder?: string
     error_message?: string
 }>()
-const model = defineModel()
+const model = defineModel<string | number | File>()
 </script>
 
 <style scoped>
