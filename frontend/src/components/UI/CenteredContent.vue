@@ -1,8 +1,6 @@
 <template>
     <div class="wrapper">
-        <div class="centered_box">
-            <slot></slot>
-        </div>
+        <slot></slot>
     </div>
 </template>
 
@@ -12,14 +10,14 @@
 
 <style scoped>
 .wrapper {
+    position: absolute;
+    left: 0px;
+    top: 0px;
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
     height: 100vh;
     background: var(--dark-mode-bg-color);
-    color: var(--dark-mode-ok-font-color);
-}
-.centered_box {
-    text-align: center;
 }
 </style>

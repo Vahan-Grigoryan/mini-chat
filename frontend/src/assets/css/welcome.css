@@ -8,3 +8,7 @@ button {
 button:first-child {
     margin-left: 0px;
 }
+.welcome_box {
+    text-align: center;
+    color: var(--dark-mode-ok-font-color);
+}

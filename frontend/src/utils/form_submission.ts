@@ -1,7 +1,7 @@
 /*
-There are support functions for form submissiond
+There are support functions for form submissions
 */
-import { AxiosErrorResponse } from "@/ts/interfaces"
+import { AxiosErrorResponse } from "@/ts/interfaces/request"
 
 
 function clearErrorData<DataType>(

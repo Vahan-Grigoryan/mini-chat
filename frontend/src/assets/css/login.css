@@ -1,10 +1,10 @@
-.registration_box span {
+.login_box span {
     font-size: 18px;
     display: inline-block;
     margin-bottom: 10px;
     color: var(--dark-mode-no-font-color)
 }
-.registration_box {
+.login_box {
     text-align: center;
     color: var(--dark-mode-ok-font-color);
 }
