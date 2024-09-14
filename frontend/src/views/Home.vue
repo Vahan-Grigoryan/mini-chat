@@ -134,6 +134,7 @@
                     type="text" cols="70" rows="2"
                     v-model="current_group_message.messages[current_message_i].text"
                 />
+                <ui-ok-button class="submit_group_message">Send group of messages</ui-ok-button>
             </div>
         </div>
     </div>

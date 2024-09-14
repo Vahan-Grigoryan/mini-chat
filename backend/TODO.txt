@@ -1,0 +1,2 @@
+1) Some columns in tables got not null constraint
+2) SQLAlchemy models ready

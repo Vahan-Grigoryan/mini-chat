@@ -61,3 +61,7 @@
 .send_message_box .message textarea:focus {
     outline: none;
 }
+.submit_group_message {
+    position: absolute;
+    right: 15px;
+}

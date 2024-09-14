@@ -11,7 +11,7 @@
     --dark-mode-bg-color5: #2B2D42;
     --dark-mode-ok-btn-color: #212529;
     --dark-mode-ok-font-color: white;
-    --dark-mode-no-font-color: white;
+    --dark-mode-no-font-color: red;
     --dark-mode-no-btn-color: #EF233C;
 }
 body {

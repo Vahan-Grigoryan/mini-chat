@@ -2,7 +2,7 @@
 Settings for whole project
 """
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from pydantic import BaseModel, computed_field
+from pydantic import BaseModel
 from api.auth.config import AuthSettings
 
 
@@ -15,7 +15,11 @@ class DatabaseSettings(BaseModel):
     
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore", env_nested_delimiter="__")
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        extra="ignore",
+        env_nested_delimiter="__"
+    )
 
     host: str = "localhost"
     port: int = 8000

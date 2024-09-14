@@ -1,4 +1,4 @@
-.registration_box span {
+.registration_box > span {
     font-size: 18px;
     display: inline-block;
     margin-bottom: 10px;

@@ -30,12 +30,14 @@ def upgrade() -> None:
         sa.Column(
             "author_id",
 	        sa.Integer,
-	        sa.ForeignKey("users.id", ondelete="CASCADE")
+	        sa.ForeignKey("users.id", ondelete="CASCADE"),
+            nullable=False
         ),
         sa.Column(
             "conversation_id",
 	        sa.Integer,
-	        sa.ForeignKey("conversations.id", ondelete="CASCADE")
+	        sa.ForeignKey("conversations.id", ondelete="CASCADE"),
+            nullable=False
         ),
     )
     op.create_table(
@@ -51,17 +53,19 @@ def upgrade() -> None:
             "group_message_id",
             sa.Integer,
             sa.ForeignKey("group_messages.id", ondelete="CASCADE"),
+            nullable=False
         )
     )
     op.create_table(
         "images",
         sa.Column("id", sa.Integer, primary_key=True),
-        sa.Column("path", sa.Text),
+        sa.Column("path", sa.Text, nullable=False),
         sa.Column("desc", sa.String(300)),
         sa.Column(
             "message_id",
 	        sa.Integer,
-	        sa.ForeignKey("messages.id", ondelete="CASCADE")
+	        sa.ForeignKey("messages.id", ondelete="CASCADE"),
+            nullable=False
         ),
     )
     op.create_table(
@@ -81,10 +85,11 @@ def upgrade() -> None:
 
 def downgrade() -> None:
     remove_list = (
-        "conversations",
-        "group_messages",
-        "messages",
+        "conversations_users_associations",
         "images",
+        "messages",
+        "group_messages",
+        "conversations",
     )
     for table in remove_list:
         op.drop_table(table)
