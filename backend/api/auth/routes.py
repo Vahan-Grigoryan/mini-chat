@@ -1,6 +1,3 @@
-"""
-Path operations
-"""
 from typing import Annotated
 from fastapi import APIRouter, Cookie
 from fastapi.responses import JSONResponse
@@ -50,7 +47,7 @@ def tokens(
     response.set_cookie(
         "refresh_token",
         refresh_token,
-        settings.auth.jwt_refresh_token_lifetime*60,
+        settings.auth.jwt_refresh_token_lifetime,
         httponly=True
     )
     return response

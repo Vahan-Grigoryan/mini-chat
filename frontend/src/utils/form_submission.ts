@@ -16,7 +16,7 @@ function clearErrorData<DataType>(
 
 function fillErrorData<DataType>(
     axios_error_response: AxiosErrorResponse<DataType>,
-    data?: Partial<Record<keyof DataType, string>>
+    data: Partial<Record<keyof DataType, string>>
 ): string | null {
     // Fill fields with error messages(in place) and return global error message or null
     if(Array.isArray(axios_error_response.response.data.detail) && data) {
