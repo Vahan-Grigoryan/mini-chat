@@ -28,15 +28,11 @@ def upgrade() -> None:
                 nullable=False
             )
         )
-        batch_op.add_column(
-            sa.Column(
-                "photo",
-                sa.Text
-            )
-        )
+        batch_op.add_column(sa.Column("photo", sa.Text))
 
 
 def downgrade() -> None:
     with op.batch_alter_table("conversations") as batch_op:
         batch_op.drop_column("name")
         batch_op.drop_column("photo")
+

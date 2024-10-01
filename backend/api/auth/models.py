@@ -5,7 +5,7 @@ import hashlib
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 from core.db import Base
-from api.chat.models import conversations_and_users_associations
+from api.chat.models import conversations_users_associations
 
 
 class User(Base):
@@ -19,10 +19,18 @@ class User(Base):
     photo = Column(String(500))
     tel = Column(Integer)
 
+    admin_in_conversations = relationship(
+        "Conversation",
+        back_populates="admin"
+    )
     conversations = relationship(
         "Conversation",
-    	conversations_and_users_associations,
-    	back_populates="users"
+        conversations_users_associations,
+        back_populates="users"
+    )
+    group_messages = relationship(
+        "GroupMessage",
+        back_populates="author"
     )
 
     def set_password(self, new_password):

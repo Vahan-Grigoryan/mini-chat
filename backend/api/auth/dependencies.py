@@ -14,7 +14,7 @@ from core import dependencies as global_deps
 async def _create_user(
     db_session: global_deps.db_session,
     user_data: schemas.UserInputData = Depends()
-):
+) -> models.User:
     """Create and return user to path operation"""
     try:
         user = await db_manipulations.create_user(
@@ -54,9 +54,10 @@ def _get_current_user(
     access_token: Annotated[str,
         Depends(OAuth2PasswordBearer(tokenUrl="tokens"))
     ]
-):
+) -> models.User | None:
     """
     Find and return user by provided access_token in header.
+    If access_token not present or expired, raises error
     """
     payload = utils.decode_token(settings, access_token, "Access token expired")
     return db_manipulations.get_user(db_session, {"id": payload["user_id"]})
@@ -65,7 +66,7 @@ def _get_current_user(
 def _authenticate_user(
     db_session: global_deps.db_session,
     user_credetnials: Annotated[OAuth2PasswordRequestForm, Depends()]
-):
+) -> models.User:
     """
     Find user by email(username in OAuth2PasswordRequestForm)
     and check password, if it invalid, raise error,
