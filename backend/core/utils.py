@@ -2,6 +2,10 @@
 This file created for place code, that can make convenient to use any
 internal functionality of system(not business logic).
 """
+import os
+from fastapi import UploadFile
+
+
 def from_camel_to_snake_case(string: str):
     """
     Examples:
@@ -44,3 +48,31 @@ def from_camel_to_snake_case(string: str):
         string_by_chars = string_by_chars[:-1] + plural_transformations[char_ending]
 
     return string_by_chars
+
+
+async def download_photo_if_provided(
+    photo: UploadFile | None,
+    conversation_id: int | None = None,
+    user_id: int | None = None,
+):
+    """
+    Create/change photo image if provided,
+    return photo path or None.
+
+    MUST be provided at least one of
+    (conversation_id, user_id) fields
+    """
+    if not photo: return 
+
+    if user_id:
+        filename = f"user_{user_id}.{photo.filename.split('.')[-1]}"
+    else:
+        filename = f"conversation_{conversation_id}.{photo.filename.split('.')[-1]}"
+    
+    photo_path = "images/photo_for_" + filename
+    os.makedirs(os.path.dirname(photo_path), exist_ok=True)
+    with open(photo_path, "wb") as f:
+        f.write(await photo.read())
+
+    return photo_path
+

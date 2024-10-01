@@ -8,6 +8,18 @@
     height: 100vh;
     background: var(--dark-mode-bg-color2);
 }
+.contacts > input {
+    width: 90%;
+    background: var(--dark-mode-bg-color);
+    color: var(--dark-mode-ok-font-color);
+    margin: 20px 0px 0px 50%;
+    padding: 10px 15px;
+    border: none;
+    transform: translateX(-50%);
+    border-radius: 50px;
+    font-size: 18px;
+    
+}
 .chat {
     width: 80%;
     height: 100vh;

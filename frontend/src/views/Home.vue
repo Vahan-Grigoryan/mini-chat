@@ -27,6 +27,7 @@
     />
     <div class="main_chat_box">
         <div class="contacts">
+            <input type="text" placeholder="Find conversation/user">
             <ui-contact
             :first_name="'fname'"
             :last_name="'lname'"
