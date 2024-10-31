@@ -1,8 +1,9 @@
+import uvicorn, os
 from fastapi.exceptions import RequestValidationError
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-import uvicorn
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from api.auth.routes import router as auth_router
@@ -10,10 +11,15 @@ from api.chat.routes import router as chat_router
 from core.config import Settings
 
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    os.makedirs("images", exist_ok=True)
+    app.mount("/images", StaticFiles(directory="images"), name="images")
+    yield
+
+app = FastAPI(lifespan=lifespan)
 app.include_router(auth_router)
 app.include_router(chat_router)
-app.mount("/images", StaticFiles(directory="images"), name="images")
 settings = Settings()
 
 origins = [
